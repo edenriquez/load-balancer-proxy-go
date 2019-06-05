@@ -9,4 +9,12 @@ The application is a proxy that will redirect and prioritize requests based on t
 ![proxy architecture](assets/proxy.png)
 
 
+### Requestor
+
+Usage
+
+```
+./requestor -u <your-valid-url> -n <number of requests>
+```
+
 > special thanks to  https://github.com/narenaryan because with his help I can build the concurrent requestor by taking his example from https://blog.narenarya.in/concurrent-http-in-go.html
