@@ -1,4 +1,3 @@
-// concurrent.go
 package concurrent
 
 import (
@@ -6,26 +5,41 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"time"
+	"strconv"
 
 	"github.com/edenriquez/load-balancer-proxy-go/requestor/flagger"
 )
 
-func MakeRequest(url string, ch chan<- string) {
+var globalCounter = 0
 
-	resp, _ := http.Get(url)
+func makeRequest(c flagger.Commands, ch chan<- string) {
+	for index := int64(0); index < c.Number; index++ {
+		globalCounter++
+		fmt.Printf(
+			flagger.NoticeColor,
+			"Starting request number:["+strconv.Itoa(globalCounter)+"] ",
+		)
+		resp, err := http.Get(c.URL)
+		if err != nil {
+			fmt.Printf(flagger.ErrorColor, err.Error()+"\n")
+			continue
+		}
+		body, _ := ioutil.ReadAll(resp.Body)
 
-	secs := time.Since(start).Seconds()
-	body, _ := ioutil.ReadAll(resp.Body)
-	ch <- fmt.Sprintf("%.2f elapsed with response length: %d %s", secs, len(body), url)
+		ch <- string(body)
+
+	}
 }
 
+// Requestor should execute concurrent requests
 func Requestor(args ...flagger.Commands) {
 	ch := make(chan string)
-	for _, url := range os.Args[1:] {
-		go MakeRequest(url, ch)
+	for _, command := range args {
+		go makeRequest(command, ch)
 	}
+
 	for range os.Args[1:] {
 		fmt.Println(<-ch)
+
 	}
 }

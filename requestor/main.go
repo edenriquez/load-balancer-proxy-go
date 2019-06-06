@@ -1,9 +1,12 @@
 package main
 
-import serial "github.com/edenriquez/load-balancer-proxy-go/requestor/serial"
-import flagger "github.com/edenriquez/load-balancer-proxy-go/requestor/flagger"
+import (
+	"github.com/edenriquez/load-balancer-proxy-go/requestor/concurrent"
+	flagger "github.com/edenriquez/load-balancer-proxy-go/requestor/flagger"
+)
 
 func main() {
 	args := flagger.Flagger()
-	serial.Requestor(args...)
+	// serial.Requestor(args...)
+	concurrent.Requestor(args...)
 }
