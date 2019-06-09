@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/edenriquez/load-balancer-proxy-go/requestor/flagger"
@@ -38,8 +37,7 @@ func Requestor(args ...flagger.Commands) {
 		go makeRequest(command, ch)
 	}
 
-	for range os.Args[1:] {
+	for j := 0; j < len(args); j++ {
 		fmt.Println(<-ch)
-
 	}
 }
