@@ -27,8 +27,7 @@ func makeRequest(c flagger.Commands, ch chan<- string) {
 				resp.Body.Close()
 				fmt.Printf(flagger.InfoColor, "Starting request number:["+strconv.Itoa(globalCounter)+"]"+string(body))
 			}
-
-			if tmp-1 == int64(globalCounter) {
+			if tmp-1 == int64(globalCounter) || tmp == int64(globalCounter) {
 				fmt.Println("closing ")
 				close(ch)
 			}
