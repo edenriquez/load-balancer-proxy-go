@@ -9,7 +9,7 @@ import (
 
 // RouterSetUp shoulddeclare routes
 func RouterSetUp(app *iris.Application, service *service.Service) {
-	app.Post("/", func(c iris.Context) {
+	app.Get("/", func(c iris.Context) {
 		middlewares.Scheduler(c, service)
 	}, handlers.ProxyHandler)
 }
