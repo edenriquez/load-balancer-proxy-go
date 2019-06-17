@@ -11,20 +11,21 @@ import (
 // proxyQueue is the request queue
 var proxyQueue []*entity.Proxy
 
+// StartQueue should initialize proxy queue
+func StartQueue() {
+	proxyQueue = append(proxyQueue, &entity.Proxy{})
+}
+
 // Scheduler should store queue requests
 func Scheduler(ctx iris.Context, service *service.Service) {
 	domain := ctx.GetHeader("domain")
 	result, err := service.Find(domain)
 	if err != nil {
 		ctx.JSON(iris.Map{"result": err})
+		return
 	}
 	queue(result)
 	ctx.Next()
-}
-
-// StartQueue should initialize proxy queue
-func StartQueue() {
-	proxyQueue = append(proxyQueue, &entity.Proxy{})
 }
 
 /*
