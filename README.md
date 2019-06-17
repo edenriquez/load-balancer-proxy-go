@@ -8,6 +8,11 @@ The application is a proxy that will redirect and prioritize requests based on t
 
 ![proxy architecture](assets/proxy.png)
 
+### quick mysql run
+
+```
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=proxy -d mysql:5.6.40
+```
 
 ### Requestor
 
