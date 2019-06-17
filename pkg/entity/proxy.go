@@ -6,7 +6,7 @@ import "errors"
 type Proxy struct {
 	ID       int    `json:"id,omitempty"`
 	Domain   string `json:"domain,omitempty"`
-	Weigth   int    `json:"weight,omitempty"`
+	Weight   int    `json:"weight,omitempty"`
 	Priority int    `json:"priority,omitempty"`
 }
 
