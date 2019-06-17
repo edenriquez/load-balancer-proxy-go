@@ -1,20 +1,12 @@
 package handlers
 
 import (
-	"fmt"
-
-	service "github.com/edenriquez/load-balancer-proxy-go/pkg/proxy"
+	scheduler "github.com/edenriquez/load-balancer-proxy-go/api/middlewares"
 	"github.com/kataras/iris"
 )
 
 // ProxyHandler should redirect to specific domain
-func ProxyHandler(ctx iris.Context, service *service.Service) {
-	domain := ctx.GetHeader("domain")
-	result, err := service.Find(domain)
-	fmt.Println(err)
-	if err != nil {
-		ctx.JSON(iris.Map{"result": "not found"})
-		return
-	}
-	ctx.JSON(iris.Map{"result": result})
+func ProxyHandler(ctx iris.Context) {
+	lastIn := scheduler.Dequeue()
+	ctx.JSON(iris.Map{"result": lastIn})
 }
