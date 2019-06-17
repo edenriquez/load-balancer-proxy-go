@@ -16,16 +16,19 @@ func makeRequest(c flagger.Commands, ch chan<- string) {
 	tmp += c.Number
 	go func() {
 		for index := int64(0); index < c.Number; index++ {
-			resp, err := http.Get(c.URL)
+			client := &http.Client{}
+			req, err := http.NewRequest("GET", c.URL, nil)
+			req.Header.Set("domain", c.Domain)
+			res, err := client.Do(req)
 			globalCounter++
 			if err != nil {
 				fmt.Printf(flagger.InfoColor, "Starting request number:["+strconv.Itoa(globalCounter)+"]"+err.Error()+"\n")
 			}
-			if resp != nil {
-				body, _ := ioutil.ReadAll(resp.Body)
+			if res != nil {
+				body, _ := ioutil.ReadAll(res.Body)
 				ch <- string(body)
-				resp.Body.Close()
-				fmt.Printf(flagger.InfoColor, "Starting request number:["+strconv.Itoa(globalCounter)+"]"+string(body))
+				res.Body.Close()
+				fmt.Printf(flagger.InfoColor, "Starting request number:["+strconv.Itoa(globalCounter)+"]\n")
 			}
 			if tmp-1 == int64(globalCounter) || tmp == int64(globalCounter) {
 				fmt.Println("closing ")

@@ -18,13 +18,15 @@ const (
 type Commands struct {
 	URL    string
 	Number int64
+	Domain string
 }
 
 // Requestor should take args and request in parallel
 const instructions = `
 Usage: go run main.go [options...] <url> , ...
-example: go run main.go -u http://localhost -n 2 -u http://example.com -n 1 ...
+example: go run main.go -u http://localhost -n 2 -h omega -u http://example.com -n 1 ...
 Options:
+	-h  domain to request [omega, alpha, beta]
 	-n	number of requests
 	-u	indicates the url to request
 `
@@ -51,9 +53,18 @@ func Flagger() []Commands {
 				fmt.Printf(ErrorColor, "[-] Invalid request number\n")
 				os.Exit(0)
 			}
-			urlObj.Number = n // number of requests
+			urlObj.Number = n
 		}
-		if urlObj.Number > 0 && urlObj.URL != "" {
+
+		if os.Args[ind] == "-h" {
+			n := os.Args[ind+1]
+			if len(n) < 1 {
+				fmt.Printf(ErrorColor, "[-] Invalid request headers\n")
+				os.Exit(0)
+			}
+			urlObj.Domain = n
+		}
+		if urlObj.Number > 0 && urlObj.URL != "" && urlObj.Domain != "" {
 			args = append(args, urlObj)
 			urlObj = Commands{}
 		}
