@@ -69,7 +69,7 @@ func (r *MysqlRepository) Find(service string) (*entity.Proxy, error) {
 	}
 	return &entity.Proxy{
 		Domain:   row.Str(1),
-		Weigth:   row.Int(2),
+		Weight:   row.Int(2),
 		Priority: row.Int(3),
 	}, nil
 }
